@@ -12,17 +12,16 @@ logger = logging.getLogger(__file__)
 
 
 def get_product_list(last_id, client_id, seller_token):
-            """Получить список товаров магазина озон
+  """Получить список товаров магазина озон
 
-    Args:
-        last_id: Идентификатор последнего полученного товара для продолжения пагинации.
-        client_id: Идентификатор клиента на Озон.
-        seller_token: Токен продавца на Озон.
+  Args:
+    last_id (str): Идентификатор последнего полученного товара для продолжения пагинации.
+    client_id (str): Идентификатор клиента на Озон.
+    seller_token (str): Токен продавца на Озон.
 
-    Returns:
-        Словарь с результатами запроса к API Озон, содержащий информацию о товарах.
-    """
-
+  Returns:
+    Dict[str, Any]: Словарь с результатами запроса к API Озон, содержащий информацию о товарах.
+  """
     url = "https://api-seller.ozon.ru/v2/product/list"
     headers = {
         "Client-Id": client_id,
@@ -42,15 +41,15 @@ def get_product_list(last_id, client_id, seller_token):
 
 
 def get_offer_ids(client_id, seller_token):
-        """Получает список артикулов (offer_id) товаров магазина на Озон.
+  """Получает список артикулов (offer_id) товаров магазина на Озон.
 
-    Args:
-        client_id: Идентификатор клиента на Озон.
-        seller_token: Токен продавца на Озон.
+  Args:
+    client_id (str): Идентификатор клиента на Озон.
+    seller_token (str): Токен продавца на Озон.
 
-    Returns:
-        Список артикулов (offer_id) товаров магазина.
-    """
+  Returns:
+    List[str]: Список артикулов (offer_id) товаров магазина.
+  """
     last_id = ""
     product_list = []
     while True:
@@ -67,18 +66,18 @@ def get_offer_ids(client_id, seller_token):
 
 
 def update_price(prices: list, client_id, seller_token):
-        """Обновляет цены товаров на Озон.
+  """Обновляет цены товаров на Озон.
 
-    Args:
-        prices: Список словарей, представляющих цены для обновления. Каждый словарь содержит:
-            - offer_id: Артикул товара (offer_id)
-            - price: Новая цена товара.
-        client_id: Идентификатор клиента на Озон.
-        seller_token: Токен продавца на Озон.
+  Args:
+    prices (List[Dict[str, Any]]): Список словарей, представляющих цены для обновления. Каждый словарь содержит:
+      - offer_id: Артикул товара (offer_id)
+      - price: Новая цена товара.
+    client_id (str): Идентификатор клиента на Озон.
+    seller_token (str): Токен продавца на Озон.
 
-    Returns:
-        Ответ от API Озон в формате JSON, содержащий информацию об успехе или неудаче обновления.
-    """
+  Returns:
+    Dict[str, Any]: Ответ от API Озон в формате JSON, содержащий информацию об успехе или неудаче обновления.
+  """
     url = "https://api-seller.ozon.ru/v1/product/import/prices"
     headers = {
         "Client-Id": client_id,
@@ -91,18 +90,18 @@ def update_price(prices: list, client_id, seller_token):
 
 
 def update_stocks(stocks: list, client_id, seller_token):
-        """Обновляет остатки товаров на Озон.
+  """Обновляет остатки товаров на Озон.
 
-    Args:
-        stocks: Список словарей, представляющих остатки для обновления. Каждый словарь содержит:
-            - offer_id: Артикул товара (offer_id)
-            - stock: Количество товара на складе.
-        client_id: Идентификатор клиента на Озон.
-        seller_token: Токен продавца на Озон.
+  Args:
+    stocks (List[Dict[str, Any]]): Список словарей, представляющих остатки для обновления. Каждый словарь содержит:
+      - offer_id: Артикул товара (offer_id)
+      - stock: Количество товара на складе.
+    client_id (str): Идентификатор клиента на Озон.
+    seller_token (str): Токен продавца на Озон.
 
-    Returns:
-        Ответ от API Озон в формате JSON, содержащий информацию об успехе или неудаче обновления.
-    """
+  Returns:
+    Dict[str, Any]: Ответ от API Озон в формате JSON, содержащий информацию об успехе или неудаче обновления.
+  """
     url = "https://api-seller.ozon.ru/v1/product/import/stocks"
     headers = {
         "Client-Id": client_id,
@@ -115,10 +114,11 @@ def update_stocks(stocks: list, client_id, seller_token):
 
 
 def download_stock():
-    """Скачать файл ostatki с сайта casio
-        Returns:
-        Список словарей, представляющих данные об остатках товаров из файла "ostatki.xls".
-        """
+  """Скачать файл ostatki с сайта casio
+
+  Returns:
+    List[Dict[str, Any]]: Список словарей, представляющих данные об остатках товаров из файла "ostatki.xls".
+  """
     # Скачать остатки с сайта
     casio_url = "https://timeworld.ru/upload/files/ostatki.zip"
     session = requests.Session()
@@ -139,17 +139,17 @@ def download_stock():
 
 
 def create_stocks(watch_remnants, offer_ids):
-        """Создает список остатков для обновления на Озон.
+   """Создает список остатков для обновления на Озон.
 
-    Args:
-        watch_remnants: Список остатков товаров от Casio, полученный из файла "ostatki.xls".
-        offer_ids: Список артикулов товаров (offer_id) магазина на Озон.
+ Args:
+  watch_remnants: Список остатков товаров от Casio, полученный из файла "ostatki.xls". Тип: list[dict[str, Any]].
+  offer_ids: Список артикулов товаров (offer_id) магазина на Озон. Тип: list[str].
 
-    Returns:
-        Список словарей, представляющих остатки для обновления на Озон. Каждый словарь содержит:
-            - offer_id: Артикул товара (offer_id)
-            - stock: Количество товара на складе, преобразованное из формата Casio в числовой формат.
-    """
+ Returns:
+  List[Dict[str, Any]]: Список словарей, представляющих остатки для обновления на Озон. Каждый словарь содержит:
+   - offer_id: Артикул товара (offer_id), тип: str
+   - stock: Количество товара на складе, преобразованное из формата Casio в числовой формат, тип: int.
+ """
     # Уберем то, что не загружено в seller
     stocks = []
     for watch in watch_remnants:
@@ -170,20 +170,20 @@ def create_stocks(watch_remnants, offer_ids):
 
 
 def create_prices(watch_remnants, offer_ids):
-        """Создает список цен для обновления на Озон.
+  """Создает список цен для обновления на Озон.
 
-    Args:
-        watch_remnants: Список остатков товаров от Casio, полученный из файла "ostatki.xls".
-        offer_ids: Список артикулов товаров (offer_id) магазина на Озон.
+  Args:
+    watch_remnants: Список остатков товаров от Casio, полученный из файла "ostatki.xls". Тип: list[dict[str, Any]].
+    offer_ids: Список артикулов товаров (offer_id) магазина на Озон. Тип: list[str].
 
-    Returns:
-        Список словарей, представляющих цены для обновления на Озон. Каждый словарь содержит:
-            - auto_action_enabled: "UNKNOWN" (не используется)
-            - currency_code: "RUB" (код валюты)
-            - offer_id: Артикул товара (offer_id)
-            - old_price: "0" (не используется)
-            - price: Цена товара, преобразованная из формата Casio в числовой формат.
-            """
+  Returns:
+    Список словарей, представляющих цены для обновления на Озон. Каждый словарь содержит:
+      - auto_action_enabled: "UNKNOWN" (не используется) - Тип: str
+      - currency_code: "RUB" (код валюты) - Тип: str
+      - offer_id: Артикул товара (offer_id) - Тип: str
+      - old_price: "0" (не используется) - Тип: str
+      - price: Цена товара, преобразованная из формата Casio в числовой формат. - Тип: int or float
+  """
     prices = []
     for watch in watch_remnants:
         if str(watch.get("Код")) in offer_ids:
@@ -199,42 +199,42 @@ def create_prices(watch_remnants, offer_ids):
 
 
 def price_conversion(price: str) -> str:
-       """Преобразует строку с ценой из формата Casio в числовой формат.
+    """Преобразует строку с ценой из формата Casio в числовой формат.
 
-    Args:
-        price: Строка с ценой в формате Casio, например, "5'990.00 руб.".
+  Args:
+    price: Строка с ценой в формате Casio, например, "5'990.00 руб.". Тип: str.
 
-    Returns:
-        Числовой формат цены, например, "5990".
-    """
+  Returns:
+    Числовой формат цены, например, "5990". Тип: str.
+  """
     return re.sub("[^0-9]", "", price.split(".")[0])
 
 
 def divide(lst: list, n: int):
-    """Разделяет список на части заданной длины.
+  """Разделяет список на части заданной длины.
 
-    Args:
-        lst: Список, который нужно разделить.
-        n: Длина каждой части списка.
+  Args:
+    lst: Список, который нужно разделить. Тип: list.
+    n: Длина каждой части списка. Тип: int.
 
-    Yields:
-        Итератор, который возвращает части списка длиной n.
-    """
+  Yields:
+    Итератор, который возвращает части списка длиной n. Тип: list.
+  """
     for i in range(0, len(lst), n):
         yield lst[i : i + n]
 
 
 async def upload_prices(watch_remnants, client_id, seller_token):
-        """Загрузить цены на товары.
+  """Загрузить цены на товары.
 
-    Args:
-        watch_remnants: список остатков товаров
-        client_id: id клиента
-        seller_token: токен продавца
+  Args:
+    watch_remnants: список остатков товаров, Тип: list[dict[str, Any]].
+    client_id: id клиента, Тип: str.
+    seller_token: токен продавца, Тип: str.
 
-    Returns:
-        Список цен
-    """
+  Returns:
+    Список цен, Тип: list[dict[str, Any]].
+  """
     offer_ids = get_offer_ids(client_id, seller_token)
     prices = create_prices(watch_remnants, offer_ids)
     for some_price in list(divide(prices, 1000)):
@@ -243,16 +243,17 @@ async def upload_prices(watch_remnants, client_id, seller_token):
 
 
 async def upload_stocks(watch_remnants, client_id, seller_token):
-    """Загрузить остатки товаров.
+  """Загрузить остатки товаров.
 
-    Args:
-        watch_remnants: список остатков товаров
-        client_id: id клиента
-        seller_token: токен продавца
+  Args:
+    watch_remnants: список остатков товаров, Тип: list[dict[str, Any]].
+    client_id: id клиента, Тип: str.
+    seller_token: токен продавца, Тип: str.
 
-    Returns:
-        Список остатков, которые не равны 0
-    """
+  Returns:
+    Список остатков, которые не равны 0, Тип: list[dict[str, Any]].
+    Полный список остатков, Тип: list[dict[str, Any]].
+  """
     offer_ids = get_offer_ids(client_id, seller_token)
     stocks = create_stocks(watch_remnants, offer_ids)
     for some_stock in list(divide(stocks, 100)):
